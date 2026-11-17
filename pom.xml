@@ -91,6 +91,18 @@
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>${logstash-logback-encoder.version}</version>
             </dependency>
+            <!-- needed by liquibase-core, which pulls 1.11.0 via opencsv -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>1.13.0</version>
+            </dependency>
+            <!-- needed by oncebox-aop, which pulls 13.0 via opentelemetry -->
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>26.1.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -113,6 +125,25 @@
         </pluginManagement>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>enforce-convergence</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <dependencyConvergence/>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
